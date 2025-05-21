@@ -67,14 +67,15 @@ def get_base64_image(image_path):
         st.error(f"Error: The file '{image_path}' was not found.")
         return None
 script_dir = os.path.dirname(os.path.abspath(__file__))
-image_path = os.path.join(script_dir, "aiimage.png")
+image_path = os.path.join(script_dir, "aiimage-removebg-preview.png")
 
 
 def chat_ui():
     encoded_image = get_base64_image(image_path)
-    st.markdown("""
+    st.markdown(
+    f"""
     <style>
-    .genome-logo {
+    .genome-logo {{
         font-size: 32px;
         font-weight: bold;
         color: #00FF00;
@@ -82,40 +83,30 @@ def chat_ui():
         -webkit-background-clip: text;
         color: transparent;
         text-align: center;
-    }
-    .stApp {
-        background-image:  url("data:image/png;base64,{encoded_image}");
-        background-size: cover;
-        background-position: center;
-        
+    }}
+
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        bottom: 10px;       /* distance from bottom */
+        right: 10px;        /* distance from right */
+        width: 150px;       /* adjust size */
+        height: 150px;      /* adjust size */
+        background-image: url("data:image/png;base64,{encoded_image}");
+        background-size: contain;
         background-repeat: no-repeat;
-        
-    }
-    .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 12px;
-    }
-    .stTextInput>div>div>input {
-        background-color: rgba(255, 255, 255, 0.8);
-        color: #000000;
-        border-radius: 12px;
-        padding: 10px;
-    }
-    .stMarkdown {
-        color: #FFFFFF;
-    }
+        background-position: center;
+        opacity: 0.7;       /* optional transparency */
+        pointer-events: none; /* so it doesn’t block clicks */
+        z-index: 0;
+    }}
     </style>
+
     <div class="genome-logo">Signetic.AI</div>
-    """, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True,
+)
+
 
     st.title("PDF Query Chatbot")
 
